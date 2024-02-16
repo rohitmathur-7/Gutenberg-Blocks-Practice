@@ -1,0 +1,11 @@
+body {
+  background-color: rgb(99, 183, 232);
+}
+
+.wp-block {
+  max-width: 800px;
+}
+
+.has-red-to-blue-gradient-background {
+  background: linear-gradient(135deg, #e4064d 0%, #2c59ee 100%);
+}

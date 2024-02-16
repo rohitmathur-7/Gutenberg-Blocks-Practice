@@ -1,0 +1,65 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "my-blocks/text-box",
+	"version": "0.1.0",
+	"title": "Text Box",
+	"keywords": ["text", "box"],
+	"category": "text",
+	"icon": "smiley",
+	"description": "Text Box.",
+	"example": {},
+	"supports": {
+		"html": false,
+		"color": {
+			"background": true,
+			"text": true,
+			"gradients": true
+		}
+	},
+	"textdomain": "text-box",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"viewScript": "file:./view.js",
+	"attributes": {
+		"text": {
+			"type": "string",
+			"source": "html",
+			"selector": "h4"
+		},
+		"alignment": {
+			"type": "string",
+			"default": "left"
+		},
+		"checked": {
+			"type": "boolean"
+		},
+		"backgroundColor": {
+			"type": "string",
+			"default": "strong-magenta"
+		},
+		"textColor": {
+			"type": "string",
+			"default": "very-light-gray"
+		},
+		"customBackgroundColor": {
+			"type": "string"
+		},
+		"customTextColor": {
+			"type": "string"
+		},
+		"gradient": {
+			"type": "string",
+			"default": "red-to-blue"
+		},
+		"style": {
+			"type": "object",
+			"default": {
+				"color": {
+					"background": "#F03"
+				}
+			}
+		}
+	}
+}
