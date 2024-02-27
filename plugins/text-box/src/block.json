@@ -15,6 +15,9 @@
 			"background": true,
 			"text": true,
 			"gradients": true
+		},
+		"spacing": {
+			"padding": true
 		}
 	},
 	"textdomain": "text-box",
@@ -58,6 +61,14 @@
 			"default": {
 				"color": {
 					"background": "#F03"
+				},
+				"spacing": {
+					"padding": {
+						"top": "var:preset|spacing|40",
+						"bottom": "var:preset|spacing|40",
+						"left": "var:preset|spacing|40",
+						"right": "var:preset|spacing|40"
+					}
 				}
 			}
 		}
