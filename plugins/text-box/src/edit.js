@@ -87,7 +87,7 @@ export default function Edit(props) {
 				placeholder={__('Your text', 'text-box')}
 				onChange={onChangeText}
 				value={text}
-				tagName="h1"
+				tagName="p"
 				allowedFormats={[]}
 			/>
 		</>
