@@ -4,11 +4,12 @@ import Edit from './edit';
 import save from './save';
 import metadata from './block.json';
 import v1 from './v1';
+import v2 from './v2';
 
 registerBlockType(metadata.name, {
 	edit: Edit,
 	save,
-	deprecated: [v1],
+	deprecated: [v2, v1],
 	variations: [
 		{
 			name: 'my-blocks/gradient-text-box',

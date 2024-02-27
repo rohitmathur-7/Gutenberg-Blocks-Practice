@@ -26,17 +26,17 @@ export default function Edit(props) {
 		setBackgroundColor,
 		setTextColor,
 	} = props;
-	const { text, alignment, checked, shadow, shadowOpacity } = attributes;
+	const { text, textAlignment, checked, shadow, shadowOpacity } = attributes;
 
 	const onChangeAlignment = (newAlignment) => {
-		setAttributes({ alignment: newAlignment });
+		setAttributes({ textAlignment: newAlignment });
 	};
 
 	const onChangeText = (nexText) => {
 		setAttributes({ text: nexText });
 	};
 
-	const classes = classnames(`text-box-align-${alignment}`, {
+	const classes = classnames(`text-box-align-${textAlignment}`, {
 		'has-shadow': shadow,
 		[`shadow-opacity-${shadowOpacity}`]: shadow && shadowOpacity,
 	});
@@ -76,7 +76,7 @@ export default function Edit(props) {
 				]}
 			>
 				<AlignmentToolbar
-					value={alignment}
+					value={textAlignment}
 					onChange={onChangeAlignment}
 				/>
 			</BlockControls>

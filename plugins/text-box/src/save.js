@@ -8,7 +8,7 @@ import classnames from 'classnames';
 export default function save({ attributes }) {
 	const {
 		text,
-		alignment,
+		textAlignment,
 		backgroundColor,
 		textColor,
 		customBackgroundColor,
@@ -17,7 +17,7 @@ export default function save({ attributes }) {
 		shadowOpacity,
 	} = attributes;
 
-	const classes = classnames(`text-box-align-${alignment}`, {
+	const classes = classnames(`text-box-align-${textAlignment}`, {
 		'has-shadow': shadow,
 		[`shadow-opacity-${shadowOpacity}`]: shadow && shadowOpacity,
 	});
