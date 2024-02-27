@@ -1,0 +1,11 @@
+Gutenberg Learnings:
+----------------------------------------------------------------
+
+- To add an example for a block which is shown in preview:
+  - Add "example" key to the block.json file of the block.
+    "example": {
+        "attributes": {
+            "text": "Sample Text",
+            "shadow": true
+        } 
+    }

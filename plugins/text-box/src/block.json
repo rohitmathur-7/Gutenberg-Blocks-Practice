@@ -20,6 +20,17 @@
 			"padding": true
 		}
 	},
+	"styles": [
+		{
+			"name": "squared",
+			"label": "Squared",
+			"isDefault": true
+		},
+		{
+			"name": "rounded",
+			"label": "Rounded"
+		}
+	],
 	"textdomain": "text-box",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
@@ -61,8 +72,7 @@
 			"type": "string"
 		},
 		"gradient": {
-			"type": "string",
-			"default": "red-to-blue"
+			"type": "string"
 		},
 		"style": {
 			"type": "object",
