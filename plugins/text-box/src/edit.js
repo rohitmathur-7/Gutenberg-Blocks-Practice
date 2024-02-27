@@ -12,8 +12,10 @@ import {
 import {
 	__experimentalBoxControl as BoxControl,
 	PanelBody,
+	RangeControl,
 } from '@wordpress/components';
 import './editor.scss';
+import classnames from 'classnames';
 
 export default function Edit(props) {
 	const {
@@ -24,7 +26,7 @@ export default function Edit(props) {
 		setBackgroundColor,
 		setTextColor,
 	} = props;
-	const { text, alignment, checked } = attributes;
+	const { text, alignment, checked, shadow, shadowOpacity } = attributes;
 
 	const onChangeAlignment = (newAlignment) => {
 		setAttributes({ alignment: newAlignment });
@@ -34,9 +36,45 @@ export default function Edit(props) {
 		setAttributes({ text: nexText });
 	};
 
+	const classes = classnames(`text-box-align-${alignment}`, {
+		'has-shadow': shadow,
+		[`shadow-opacity-${shadowOpacity}`]: shadow && shadowOpacity,
+	});
+
+	const toggleShadow = () => {
+		setAttributes({ shadow: !shadow });
+	};
+
+	const onChangeShadowOpacity = (newShadowOpacity) => {
+		setAttributes({ shadowOpacity: newShadowOpacity });
+	};
+
 	return (
 		<>
-			<BlockControls>
+			<InspectorControls>
+				{shadow && (
+					<PanelBody title={__('Shadow Setting', 'text-box')}>
+						<RangeControl
+							label={__('Shadow Opacity', 'text-box')}
+							value={shadowOpacity}
+							min={10}
+							max={40}
+							step={10}
+							onChange={onChangeShadowOpacity}
+						/>
+					</PanelBody>
+				)}
+			</InspectorControls>
+			<BlockControls
+				controls={[
+					{
+						icon: 'admin-page',
+						title: __('Shadow', 'text-box'),
+						onClick: toggleShadow,
+						isActive: shadow,
+					},
+				]}
+			>
 				<AlignmentToolbar
 					value={alignment}
 					onChange={onChangeAlignment}
@@ -44,7 +82,7 @@ export default function Edit(props) {
 			</BlockControls>
 			<RichText
 				{...useBlockProps({
-					className: `text-box-align-${alignment}`,
+					className: classes,
 				})}
 				placeholder={__('Your text', 'text-box')}
 				onChange={onChangeText}
