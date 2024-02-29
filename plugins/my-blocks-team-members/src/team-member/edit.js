@@ -17,13 +17,17 @@ import {
 	TextareaControl,
 	SelectControl,
 } from '@wordpress/components';
-import { useEffect, useState } from '@wordpress/element';
-import { select, useSelect } from '@wordpress/data';
+import { useEffect, useState, useRef } from '@wordpress/element';
+import { useSelect } from '@wordpress/data';
+import { usePrevious } from '@wordpress/compose';
 
 function Edit({ attributes, setAttributes, noticeUI, noticeOperations }) {
 	const { name, bio, url, alt, id } = attributes;
 	const [blobURL, setBlobURL] = useState();
 
+	const prevURL = usePrevious(url);
+
+	const titleRef = useRef();
 	const imageObject = useSelect(
 		(select) => {
 			const { getMedia } = select('core');
@@ -103,6 +107,10 @@ function Edit({ attributes, setAttributes, noticeUI, noticeOperations }) {
 		}
 	}, [url]);
 
+	useEffect(() => {
+		if (url && !prevURL) titleRef.current.focus();
+	}, [url]);
+
 	return (
 		<>
 			<InspectorControls>
@@ -166,6 +174,7 @@ function Edit({ attributes, setAttributes, noticeUI, noticeOperations }) {
 					notices={noticeUI}
 				/>
 				<RichText
+					ref={titleRef}
 					placeholder={__('Member name', 'team-members')}
 					tagName="h4"
 					value={name}
