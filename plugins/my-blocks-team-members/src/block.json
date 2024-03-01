@@ -9,7 +9,8 @@
 	"description": "Team members blocks",
 	"example": {},
 	"supports": {
-		"html": false
+		"html": false,
+		"align": ["wide"]
 	},
 	"keywords": ["team", "members"],
 	"textdomain": "team-members",

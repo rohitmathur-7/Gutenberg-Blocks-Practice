@@ -39,6 +39,32 @@ registerBlockType('my-blocks/team-member', {
 			selector: 'img',
 			attribute: 'src',
 		},
+		socialLinks: {
+			type: 'array',
+			default: [
+				{
+					link: 'https://facbook.com/',
+					icon: 'facebook',
+				},
+				{
+					link: 'https://instagram.com/',
+					icon: 'instagram',
+				},
+			],
+			source: 'query',
+			selector: 'wp-block-my-blocks-team-member-social-links ul li',
+			query: {
+				icon: {
+					source: 'attribute',
+					attribute: 'data-icon',
+				},
+				link: {
+					source: 'attribute',
+					selector: 'a',
+					attribute: 'href',
+				},
+			},
+		},
 	},
 	edit: Edit,
 	save: Save,
