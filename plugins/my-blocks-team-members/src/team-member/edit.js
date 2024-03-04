@@ -18,10 +18,25 @@ import {
 	SelectControl,
 	Icon,
 	Tooltip,
+	TextControl,
+	Button,
 } from '@wordpress/components';
 import { useEffect, useState, useRef } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import { usePrevious } from '@wordpress/compose';
+import {
+	DndContext,
+	useSensor,
+	useSensors,
+	PointerSensor,
+} from '@dnd-kit/core';
+import {
+	SortableContext,
+	horizontalListSortingStrategy,
+	arrayMove,
+} from '@dnd-kit/sortable';
+import SortableItem from './sortable-item';
+import { restrictToHorizontalAxis } from '@dnd-kit/modifiers';
 
 function Edit({
 	attributes,
@@ -107,6 +122,44 @@ function Edit({
 			socialLinks: [...socialLinks, { icon: 'wordpress', link: '' }],
 		});
 		setSelectedLink(socialLinks.length);
+	};
+
+	const updateSocialItem = (type, value) => {
+		const socialLinksCopy = [...socialLinks];
+		socialLinksCopy[selectedLink][type] = value;
+		setAttributes({ socialLinks: socialLinksCopy });
+	};
+
+	const removeSocialItem = () => {
+		setAttributes({
+			socialLinks: [
+				...socialLinks.slice(0, selectedLink),
+				...socialLinks.slice(selectedLink + 1),
+			],
+		});
+		setSelectedLink();
+	};
+
+	const sensors = useSensors(
+		useSensor(PointerSensor, {
+			activationConstraint: { distance: 5 },
+		})
+	);
+
+	const handleDragEnd = (event) => {
+		const { active, over } = event;
+		if (active && over && active.id !== over.id) {
+			const oldIndex = socialLinks.findIndex(
+				(i) => active.id === `${i.icon}-${i.link}`
+			);
+			const newIndex = socialLinks.findIndex(
+				(i) => over.id === `${i.icon}-${i.link}`
+			);
+			setAttributes({
+				socialLinks: arrayMove(socialLinks, oldIndex, newIndex),
+			});
+			setSelectedLink(newIndex);
+		}
 	};
 
 	useEffect(() => {
@@ -213,7 +266,32 @@ function Edit({
 				/>
 				<div className="wp-block-my-blocks-team-member-social-links">
 					<ul>
-						{socialLinks.map((item, index) => {
+						<DndContext
+							sensors={sensors}
+							onDragEnd={handleDragEnd}
+							modifiers={[restrictToHorizontalAxis]}
+						>
+							<SortableContext
+								items={socialLinks.map(
+									(item) => `${item.icon}-${item.link}`
+								)}
+								strategy={horizontalListSortingStrategy}
+							>
+								{socialLinks.map((item, index) => {
+									return (
+										<SortableItem
+											key={`${item.icon}-${item.link}`}
+											id={`${item.icon}-${item.link}`}
+											index={index}
+											selectedLink={selectedLink}
+											setSelectedLink={setSelectedLink}
+											icon={item.icon}
+										/>
+									);
+								})}
+							</SortableContext>
+						</DndContext>
+						{/* {socialLinks.map((item, index) => {
 							return (
 								<li
 									key={index}
@@ -234,7 +312,7 @@ function Edit({
 									</button>
 								</li>
 							);
-						})}
+						})} */}
 						{isSelected && (
 							<li className="wp-block-my-blocks-team-member-add-icon-li">
 								<Tooltip
@@ -254,6 +332,28 @@ function Edit({
 						)}
 					</ul>
 				</div>
+				{selectedLink !== undefined && (
+					<div className="wp-block-my-blocks-team-member-link-form">
+						<TextControl
+							label={__('Icon', 'team-members')}
+							value={socialLinks[selectedLink].icon}
+							onChange={(icon) => {
+								updateSocialItem('icon', icon);
+							}}
+						/>
+						<TextControl
+							label={__('URL', 'team-members')}
+							value={socialLinks[selectedLink].link}
+							onChange={(link) => {
+								updateSocialItem('link', link);
+							}}
+						/>
+						<br />
+						<Button isDestructive onClick={removeSocialItem}>
+							{__('Remove Link', 'team-members')}
+						</Button>
+					</div>
+				)}
 			</div>
 		</>
 	);

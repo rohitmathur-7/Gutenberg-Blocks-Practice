@@ -52,7 +52,7 @@ registerBlockType('my-blocks/team-member', {
 				},
 			],
 			source: 'query',
-			selector: 'wp-block-my-blocks-team-member-social-links ul li',
+			selector: '.wp-block-my-blocks-team-member-social-links ul li',
 			query: {
 				icon: {
 					source: 'attribute',
