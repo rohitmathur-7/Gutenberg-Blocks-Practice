@@ -209,6 +209,11 @@ function custom_blocks_scripts() {
 }
 add_action( 'wp_enqueue_scripts', 'custom_blocks_scripts' );
 
+function themename_load_dashicons() {
+	wp_enqueue_style( 'dashicons' );
+}
+add_action( 'wp_enqueue_scripts', 'themename_load_dashicons' );
+
 /**
  * Implement the Custom Header feature.
  */

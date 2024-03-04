@@ -7,7 +7,6 @@
 	"category": "text",
 	"icon": "groups",
 	"description": "Team members blocks",
-	"example": {},
 	"supports": {
 		"html": false,
 		"align": ["wide"]
@@ -23,5 +22,38 @@
 			"type": "number",
 			"default": 2
 		}
+	},
+	"example": {
+		"attributes": {
+			"columns": 2
+		},
+		"innerBlocks": [
+			{
+				"name": "my-blocks/team-member",
+				"attributes": {
+					"name": "Samantha",
+					"bio": "Developer",
+					"url": "https://picsum.photos/id/64/200/300",
+					"socialLinks": [
+						{ "icon": "facebook" },
+						{ "icon": "instagram" },
+						{ "icon": "twitter" }
+					]
+				}
+			},
+			{
+				"name": "my-blocks/team-member",
+				"attributes": {
+					"name": "Jane",
+					"bio": "Developer",
+					"url": "https://picsum.photos/id/65/200/300",
+					"socialLinks": [
+						{ "icon": "facebook" },
+						{ "icon": "instagram" },
+						{ "icon": "twitter" }
+					]
+				}
+			}
+		]
 	}
 }

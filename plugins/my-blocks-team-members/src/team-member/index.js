@@ -41,16 +41,7 @@ registerBlockType('my-blocks/team-member', {
 		},
 		socialLinks: {
 			type: 'array',
-			default: [
-				{
-					link: 'https://facbook.com/',
-					icon: 'facebook',
-				},
-				{
-					link: 'https://instagram.com/',
-					icon: 'instagram',
-				},
-			],
+			default: [],
 			source: 'query',
 			selector: '.wp-block-my-blocks-team-member-social-links ul li',
 			query: {
