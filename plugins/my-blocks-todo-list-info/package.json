@@ -20,8 +20,5 @@
 		"@wordpress/prettier-config": "^3.8.0",
 		"@wordpress/scripts": "^27.2.0",
 		"prettier": "^3.2.5"
-	},
-	"dependencies": {
-		"@wordpress/data": "^9.22.0"
 	}
 }

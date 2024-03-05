@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       Data Stores Block
+ * Plugin Name:       My Blocks Todo List
  * Description:       Example block scaffolded with Create Block tool.
  * Requires at least: 6.1
  * Requires PHP:      7.0
@@ -8,9 +8,9 @@
  * Author:            The WordPress Contributors
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       data-stores
+ * Text Domain:       todo-list
  *
- * @package           create-block
+ * @package           my-blocks-todo-list
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @see https://developer.wordpress.org/reference/functions/register_block_type/
  */
-function data_stores_block_init() {
+function todo_list_block_init() {
 	register_block_type( __DIR__ . '/build' );
 }
-add_action( 'init', 'data_stores_block_init' );
+add_action( 'init', 'todo_list_block_init' );
