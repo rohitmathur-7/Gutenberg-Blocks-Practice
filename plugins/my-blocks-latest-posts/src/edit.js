@@ -7,20 +7,60 @@ import { format, dateI18n, getSettings } from '@wordpress/date';
 import { PanelBody, ToggleControl, QueryControls } from '@wordpress/components';
 
 export default function Edit({ attributes, setAttributes }) {
-	const { numberOfPosts, displayFeaturedImage } = attributes;
+	const { numberOfPosts, displayFeaturedImage, order, orderBy, categories } =
+		attributes;
+
+	const catIDs =
+		categories && categories.length > 0
+			? categories.map((cat) => cat.id)
+			: [];
 
 	const posts = useSelect(
 		(select) => {
 			return select('core').getEntityRecords('postType', 'post', {
 				per_page: numberOfPosts,
 				_embed: true,
+				order: order,
+				orderby: orderBy,
+				categories: catIDs,
 			});
 		},
-		[numberOfPosts]
+		[numberOfPosts, order, orderBy, categories]
 	);
+
+	const allCats = useSelect((select) => {
+		return select('core').getEntityRecords('taxonomy', 'category', {
+			per_page: -1,
+		});
+	}, []);
+
+	const catSuggestions = {};
+	if (allCats) {
+		for (let i = 0; i < allCats.length; i++) {
+			const cat = allCats[i];
+			catSuggestions[cat.name] = cat;
+		}
+	}
 
 	const onChangeDisplayFeaturedImage = (value) => {
 		setAttributes({ displayFeaturedImage: value });
+	};
+
+	const onChangeNumberOfItems = (value) => {
+		setAttributes({ numberOfPosts: value });
+	};
+
+	const onCategoryChange = (values) => {
+		const hasNoSuggestions = values.some(
+			(value) => typeof value === 'string' && !catSuggestions[value]
+		);
+		if (hasNoSuggestions) return;
+
+		const updatedCats = values.map((token) => {
+			return typeof token === 'string' ? catSuggestions[token] : token;
+		});
+
+		setAttributes({ categories: updatedCats });
 	};
 
 	return (
@@ -31,6 +71,23 @@ export default function Edit({ attributes, setAttributes }) {
 						label={__('Display Featured Image', 'latest-posts')}
 						checked={displayFeaturedImage}
 						onChange={onChangeDisplayFeaturedImage}
+					/>
+					<QueryControls
+						numberOfItems={numberOfPosts}
+						onNumberOfItemsChange={onChangeNumberOfItems}
+						maxItems={10}
+						minItems={1}
+						orderBy={orderBy}
+						onOrderByChange={(value) =>
+							setAttributes({ orderBy: value })
+						}
+						order={order}
+						onOrderChange={(value) =>
+							setAttributes({ order: value })
+						}
+						categorySuggestions={catSuggestions}
+						selectedCategories={categories}
+						onCategoryChange={onCategoryChange}
 					/>
 				</PanelBody>
 			</InspectorControls>
