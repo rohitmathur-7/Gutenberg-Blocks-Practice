@@ -12,6 +12,10 @@
  *
  */
 
+include_once( 'metabox.php' );
+include_once( 'templates.php' );
+include_once( 'patterns.php' );
+
 function blocks_course_plugin_boilerplate_enqueue_assets() {
 
 	$asset_file = include( plugin_dir_path( __FILE__ ) . 'build/index.asset.php' );

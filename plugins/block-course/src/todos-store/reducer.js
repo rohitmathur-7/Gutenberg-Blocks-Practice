@@ -1,5 +1,4 @@
-import { ADD_TODO } from './types';
-import { POPULATE_TODOS } from './types';
+import { ADD_TODO, POPULATE_TODOS, UPDATE_TODO } from './types';
 
 const DEFAULT_STATE = {
 	items: [],
@@ -12,6 +11,12 @@ const reducer = (state = DEFAULT_STATE, action) => {
 
 		case POPULATE_TODOS:
 			return { ...state, items: action.todos };
+
+		case UPDATE_TODO: {
+			const itemsCopy = [...state.items];
+			itemsCopy[action.index] = action.todo;
+			return { ...state, items: itemsCopy };
+		}
 
 		default:
 			return state;
