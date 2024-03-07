@@ -1,0 +1,40 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "my-blocks/hero-block",
+	"version": "0.1.0",
+	"title": "My Hero Block",
+	"category": "widgets",
+	"icon": "smiley",
+	"description": "Hero Block",
+	"example": {},
+	"supports": {
+		"html": false
+	},
+	"attributes": {
+		"heading": {
+			"type": "string",
+			"source": "html",
+			"selector": "h1"
+		},
+		"description": {
+			"type": "string",
+			"source": "html",
+			"selector": "p"
+		},
+		"color1": {
+			"type": "string"
+		},
+		"color2": {
+			"type": "string"
+		},
+		"descriptionFontSize": {
+			"type": "string"
+		}
+	},
+	"textdomain": "my-hero-block",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"viewScript": "file:./view.js"
+}
