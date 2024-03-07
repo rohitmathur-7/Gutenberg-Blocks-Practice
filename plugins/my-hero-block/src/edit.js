@@ -3,19 +3,37 @@ import {
 	useBlockProps,
 	RichText,
 	InspectorControls,
+	MediaPlaceholder,
+	MediaReplaceFlow,
+	BlockControls,
 } from '@wordpress/block-editor';
-import { ColorPicker, FontSizePicker } from '@wordpress/components';
+import {
+	ColorPicker,
+	FontSizePicker,
+	RangeControl,
+} from '@wordpress/components';
 import { useState } from 'react';
 import './editor.scss';
 import { PanelBody } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
+import { Button } from '@wordpress/components';
 
 export default function Edit({ attributes, setAttributes }) {
-	const { heading, description, color1, color2, descriptionFontSize } =
-		attributes;
+	const {
+		heading,
+		description,
+		headingColor,
+		descriptionColor,
+		descriptionFontSize,
+		descriptionLineHeight,
+		buttonText,
+		buttonBgColor,
+	} = attributes;
 
-	const [showPanelBody1, setShowPanelBody1] = useState(false);
-	const [showPanelBody2, setShowPanelBody2] = useState(false);
+	const [showHeadingPanelBody, setShowHeadingPanelBody] = useState(false);
+	const [showDescriptionPanelBody, setShowDescriptionPanelBody] =
+		useState(false);
+	const [showButtonPanelBody, setShowButtonPanelBody] = useState(false);
 
 	const onChangeHeading = (newHeading) => {
 		setAttributes({ heading: newHeading });
@@ -26,11 +44,19 @@ export default function Edit({ attributes, setAttributes }) {
 	};
 
 	const handleChangeColor1 = (newColor) => {
-		setAttributes({ color1: newColor });
+		setAttributes({ headingColor: newColor });
 	};
 
 	const handleChangeColor2 = (newColor) => {
-		setAttributes({ color2: newColor });
+		setAttributes({ descriptionColor: newColor });
+	};
+
+	const handleChangeButtonText = (newText) => {
+		setAttributes({ buttonText: newText });
+	};
+
+	const handleChangeButtonBgColor = (newColor) => {
+		setAttributes({ buttonBgColor: newColor });
 	};
 
 	const fontSizes = useSelect((select) => {
@@ -41,26 +67,55 @@ export default function Edit({ attributes, setAttributes }) {
 		setAttributes({ descriptionFontSize: newSize });
 	};
 
+	const handleChangeDescriptionLineHeight = (newHeight) => {
+		console.log(
+			'🚀 ~ handleChangeDescriptionLineHeight ~ newHeight:',
+			newHeight
+		);
+		setAttributes({ descriptionLineHeight: newHeight });
+	};
+
+	const onChangeButtonText = (newText) => {
+		setAttributes({ buttonText: newText });
+	};
+
 	return (
 		<div {...useBlockProps()}>
 			<InspectorControls>
-				{showPanelBody1 && (
+				{showHeadingPanelBody && (
 					<PanelBody title="Heading Settings">
+						<p>Font Color: </p>
 						<ColorPicker
-							color={color1}
+							color={headingColor}
 							onChange={handleChangeColor1}
 						/>
 					</PanelBody>
 				)}
-				{showPanelBody2 && (
+				{showDescriptionPanelBody && (
 					<PanelBody title="Description Settings">
+						<p>Font Color: </p>
 						<ColorPicker
-							color={color2}
+							color={descriptionColor}
 							onChange={handleChangeColor2}
 						/>
 						<FontSizePicker
 							fontSizes={fontSizes}
 							onChange={handleChangeDescriptionFontSize}
+						/>
+						<RangeControl
+							label={__('Line Height', 'my-hero-block"')}
+							value={descriptionLineHeight}
+							onChange={handleChangeDescriptionLineHeight}
+							step={0.1}
+						/>
+					</PanelBody>
+				)}
+				{showButtonPanelBody && (
+					<PanelBody title="Button Settings">
+						<p>Button Background Color: </p>
+						<ColorPicker
+							color={buttonBgColor}
+							onChange={handleChangeButtonBgColor}
 						/>
 					</PanelBody>
 				)}
@@ -72,10 +127,11 @@ export default function Edit({ attributes, setAttributes }) {
 				value={heading}
 				onChange={onChangeHeading}
 				onFocus={() => {
-					setShowPanelBody1(true);
-					setShowPanelBody2(false);
+					setShowHeadingPanelBody(true);
+					setShowDescriptionPanelBody(false);
+					setShowButtonPanelBody(false);
 				}}
-				style={{ color: color1 }}
+				style={{ color: headingColor }}
 			/>
 			<RichText
 				tagName="p"
@@ -83,11 +139,28 @@ export default function Edit({ attributes, setAttributes }) {
 				value={description}
 				onChange={onChangeDescription}
 				onFocus={() => {
-					setShowPanelBody1(false);
-					setShowPanelBody2(true);
+					setShowHeadingPanelBody(false);
+					setShowDescriptionPanelBody(true);
+					setShowButtonPanelBody(false);
 				}}
-				style={{ color: color2, fontSize: descriptionFontSize }}
+				style={{
+					color: descriptionColor,
+					fontSize: descriptionFontSize,
+					lineHeight: descriptionLineHeight,
+				}}
 			/>
+			<Button isPrimary style={{ backgroundColor: buttonBgColor }}>
+				<RichText
+					placeholder={__('Button Text', 'my-block')}
+					value={buttonText}
+					onChange={handleChangeButtonText}
+					onFocus={() => {
+						setShowHeadingPanelBody(false);
+						setShowDescriptionPanelBody(false);
+						setShowButtonPanelBody(true);
+					}}
+				/>
+			</Button>
 		</div>
 	);
 }

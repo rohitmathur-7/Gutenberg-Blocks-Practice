@@ -1,7 +1,14 @@
 import { RichText, useBlockProps } from '@wordpress/block-editor';
 
 export default function save({ attributes }) {
-	const { heading, description, color1, color2 } = attributes;
+	const {
+		heading,
+		description,
+		color1,
+		color2,
+		descriptionFontSize,
+		descriptionLineHeight,
+	} = attributes;
 
 	return (
 		<div {...useBlockProps.save()}>
@@ -13,7 +20,11 @@ export default function save({ attributes }) {
 			<RichText.Content
 				tagName="p"
 				value={description}
-				style={{ color: color2 }}
+				style={{
+					color: color2,
+					fontSize: descriptionFontSize,
+					lineHeight: descriptionLineHeight,
+				}}
 			/>
 		</div>
 	);

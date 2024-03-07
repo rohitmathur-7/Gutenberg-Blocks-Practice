@@ -30,6 +30,16 @@
 		},
 		"descriptionFontSize": {
 			"type": "string"
+		},
+		"descriptionLineHeight": {
+			"type": "number",
+			"default": 1
+		},
+		"buttonText": {
+			"type": "string"
+		},
+		"buttonBgColor": {
+			"type": "string"
 		}
 	},
 	"textdomain": "my-hero-block",
