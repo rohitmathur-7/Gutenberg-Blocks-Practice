@@ -8,6 +8,7 @@
 	"icon": "smiley",
 	"description": "Hero Block",
 	"example": {},
+	"textdomain": "my-hero-block",
 	"supports": {
 		"html": false
 	},
@@ -22,10 +23,10 @@
 			"source": "html",
 			"selector": "p"
 		},
-		"color1": {
+		"headingColor": {
 			"type": "string"
 		},
-		"color2": {
+		"descriptionColor": {
 			"type": "string"
 		},
 		"descriptionFontSize": {
@@ -40,9 +41,21 @@
 		},
 		"buttonBgColor": {
 			"type": "string"
+		},
+		"id": {
+			"type": "number"
+		},
+		"alt": {
+			"type": "string",
+			"default": ""
+		},
+		"url": {
+			"type": "string"
+		},
+		"test": {
+			"type": "string"
 		}
 	},
-	"textdomain": "my-hero-block",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",

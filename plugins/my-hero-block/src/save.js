@@ -1,11 +1,11 @@
-import { RichText, useBlockProps } from '@wordpress/block-editor';
+import { RichText, useBlockProps, InnerBlocks } from '@wordpress/block-editor';
 
 export default function save({ attributes }) {
 	const {
 		heading,
 		description,
-		color1,
-		color2,
+		headingColor,
+		descriptionColor,
 		descriptionFontSize,
 		descriptionLineHeight,
 	} = attributes;
@@ -15,17 +15,18 @@ export default function save({ attributes }) {
 			<RichText.Content
 				tagName="h1"
 				value={heading}
-				style={{ color: color1 }}
+				style={{ color: headingColor }}
 			/>
 			<RichText.Content
 				tagName="p"
 				value={description}
 				style={{
-					color: color2,
+					color: descriptionColor,
 					fontSize: descriptionFontSize,
 					lineHeight: descriptionLineHeight,
 				}}
 			/>
+			<InnerBlocks.Content />
 		</div>
 	);
 }

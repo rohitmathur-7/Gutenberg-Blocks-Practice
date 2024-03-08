@@ -291,28 +291,6 @@ function Edit({
 								})}
 							</SortableContext>
 						</DndContext>
-						{/* {socialLinks.map((item, index) => {
-							return (
-								<li
-									key={index}
-									className={
-										selectedLink === index
-											? 'is-selected'
-											: null
-									}
-								>
-									<button
-										aria-label={__(
-											'Edit Social Link',
-											'team-members'
-										)}
-										onClick={() => setSelectedLink(index)}
-									>
-										<Icon icon={item.icon} />
-									</button>
-								</li>
-							);
-						})} */}
 						{isSelected && (
 							<li className="wp-block-my-blocks-team-member-add-icon-li">
 								<Tooltip
