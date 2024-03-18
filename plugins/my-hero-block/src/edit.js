@@ -19,7 +19,10 @@ import { PanelBody } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 import { Button } from '@wordpress/components';
 import { Toolbar } from '@wordpress/components';
-import { ToolbarButton } from '@wordpress/components';
+import { ToolbarButton, TextControl } from '@wordpress/components';
+
+import useFaq from './components/useFaq';
+import FAQ from './components/FAQ';
 
 export default function Edit({ attributes, setAttributes }) {
 	const {
@@ -34,17 +37,13 @@ export default function Edit({ attributes, setAttributes }) {
 		id,
 		alt,
 		url,
-		test,
+		faqLeftTemplateWidth,
 	} = attributes;
 
 	const [showHeadingPanelBody, setShowHeadingPanelBody] = useState(false);
 	const [showDescriptionPanelBody, setShowDescriptionPanelBody] =
 		useState(false);
 	const [showButtonPanelBody, setShowButtonPanelBody] = useState(false);
-
-	const onChangeTest = (newTest) => {
-		setAttributes({ test: newTest });
-	};
 
 	const onChangeHeading = (newHeading) => {
 		setAttributes({ heading: newHeading });
@@ -99,9 +98,103 @@ export default function Edit({ attributes, setAttributes }) {
 		setAttributes({ id: undefined, alt: '', url: undefined });
 	};
 
+	const defaultFaqLeftTemplate = [
+		[
+			'core/paragraph',
+			{
+				placeholder: __('Description', 'my-hero-block'),
+			},
+		],
+		['core/buttons', ['core/button']],
+		['core/image'],
+	];
+
+	const { numberOfPosts, userFaqs } = attributes;
+	const [showItem, setShowItem] = useState(null);
+	const [showItemUserAdded, setShowItemUserAdded] = useState(null);
+	const [showAddNewItem, setShowAddNewItem] = useState(false);
+	const [headingContent, setHeadingContent] = useState('');
+	const [descriptionContent, setDescriptionContent] = useState('');
+
+	const faqData = useFaq(url, numberOfPosts);
+
+	const onChangeURL = (newURL) => {
+		setAttributes({ url: newURL });
+	};
+
+	const onChangeNumberOfPosts = (newNumber) => {
+		setAttributes({ numberOfPosts: newNumber });
+	};
+
+	const handleShowItem = (index) => {
+		index === showItem ? setShowItem(null) : setShowItem(index);
+		setShowItemUserAdded(null);
+	};
+
+	const handleShowItemUserAdded = (index) => {
+		index === showItemUserAdded
+			? setShowItemUserAdded(null)
+			: setShowItemUserAdded(index);
+		setShowItem(null);
+	};
+
+	const addNewFaq = () => {
+		setShowAddNewItem(true);
+	};
+
+	const saveFaq = () => {
+		console.log('In save faq');
+		if (userFaqs !== undefined) {
+			setAttributes({
+				userFaqs: [
+					...userFaqs,
+					{ title: headingContent, body: descriptionContent },
+				],
+			});
+		} else {
+			setAttributes({
+				userFaqs: [{ title: headingContent, body: descriptionContent }],
+			});
+		}
+		setShowAddNewItem(false);
+		setHeadingContent('');
+		setDescriptionContent('');
+	};
+
+	const cancelFaq = () => {
+		setShowAddNewItem(false);
+		setHeadingContent('');
+		setDescriptionContent('');
+	};
+
+	const handleFaqDelete = (index) => {
+		const updatedUserFaqs = [...userFaqs];
+		updatedUserFaqs.splice(index, 1);
+		setAttributes({ userFaqs: updatedUserFaqs });
+	};
+
 	return (
 		<div {...useBlockProps()}>
 			<InspectorControls>
+				<PanelBody title={__('General Settings', 'my-hero-block')}>
+					<RangeControl
+						label={__('Left Section Width', 'my-hero-block')}
+					/>
+				</PanelBody>
+				<PanelBody title={__('FAQ Settings', 'my-hero-block')}>
+					<TextControl
+						label={__('Enter URL', 'my-hero-block')}
+						value={url}
+						onChange={onChangeURL}
+					></TextControl>
+					<RangeControl
+						label={__('Number of posts', 'my-hero-block')}
+						value={numberOfPosts}
+						onChange={onChangeNumberOfPosts}
+						min={1}
+						max={100}
+					></RangeControl>
+				</PanelBody>
 				{showHeadingPanelBody && (
 					<PanelBody title="Heading Settings">
 						<p>Font Color: </p>
@@ -140,26 +233,10 @@ export default function Edit({ attributes, setAttributes }) {
 					</PanelBody>
 				)}
 			</InspectorControls>
-			{url && (
-				<BlockControls>
-					<MediaReplaceFlow
-						name={__('Replace Image', 'team-members')}
-						onSelect={onSelectImage}
-						onSelectURL={onSelectURL}
-						onError={onUploadError}
-						accept="image/*"
-						allowedTypes={['image']}
-						mediaURL={url}
-						mediaId={id}
-					/>
-					<ToolbarButton onClick={removeImage}>
-						Remove Image
-					</ToolbarButton>
-				</BlockControls>
-			)}
-			<div style={{ display: 'flex' }}>
-				<div>
-					<RichText
+
+			{/* <div style={{ display: 'flex' }}>
+				<div> */}
+			{/* <RichText
 						{...useBlockProps()}
 						tagName="h1"
 						placeholder={__('Heading', 'my-hero-block')}
@@ -188,11 +265,6 @@ export default function Edit({ attributes, setAttributes }) {
 							lineHeight: descriptionLineHeight,
 						}}
 					/>
-					<RichText
-						value={test}
-						onChange={onChangeTest}
-						placeholder="TEST"
-					/>
 					<Button
 						isPrimary
 						style={{ backgroundColor: buttonBgColor }}
@@ -207,8 +279,8 @@ export default function Edit({ attributes, setAttributes }) {
 								setShowButtonPanelBody(true);
 							}}
 						/>
-					</Button>
-					{url && (
+					</Button> */}
+			{/* {url && (
 						<div>
 							<img src={url} alt={alt}></img>
 						</div>
@@ -218,13 +290,94 @@ export default function Edit({ attributes, setAttributes }) {
 						allowedTypes={['image']}
 						onSelect={onSelectImage}
 						onSelectURL={onSelectURL}
+					/> */}
+			{/* </div>
+			</div> */}
+			<div style={{ display: 'flex' }}>
+				<div>
+					<RichText
+						{...useBlockProps()}
+						tagName="h1"
+						placeholder={__('Heading', 'my-hero-block')}
+						value={heading}
+						onChange={onChangeHeading}
+						onFocus={() => {
+							setShowHeadingPanelBody(true);
+							setShowDescriptionPanelBody(false);
+							setShowButtonPanelBody(false);
+						}}
+						style={{ color: headingColor }}
+					/>
+					<InnerBlocks
+						template={defaultFaqLeftTemplate}
+						templateLock="all"
 					/>
 				</div>
+				{/* <InnerBlocks
+				allowedBlocks={['my-blocks/faqs-list']}
+				template={[['my-blocks/faqs-list']]}
+			/> */}
 				<div>
-					<InnerBlocks
-						allowedBlocks={['my-blocks/faqs']}
-						template={[['my-blocks/faqs']]}
-					/>
+					{faqData &&
+						faqData.map((item, index) => (
+							<FAQ
+								item={item}
+								showItem={showItem === index && true}
+								setShowItem={() => handleShowItem(index)}
+							/>
+						))}
+					{userFaqs &&
+						userFaqs.map((item, index) => (
+							<>
+								<FAQ
+									item={item}
+									showItem={
+										showItemUserAdded === index && true
+									}
+									setShowItem={() =>
+										handleShowItemUserAdded(index)
+									}
+								/>
+								<Button
+									isSecondary
+									isDestructive
+									icon="trash"
+									onClick={() => handleFaqDelete(index)}
+								/>
+							</>
+						))}
+					{showAddNewItem ? (
+						<>
+							<div>
+								<RichText
+									tagName="h2"
+									value={headingContent}
+									onChange={(value) =>
+										setHeadingContent(value)
+									}
+									placeholder="FAQ Title"
+								/>
+								<RichText
+									tagName="p"
+									value={descriptionContent}
+									onChange={(value) =>
+										setDescriptionContent(value)
+									}
+									placeholder="FAQ Description"
+								/>
+							</div>
+							<Button isPrimary onClick={saveFaq}>
+								Save
+							</Button>
+							<Button onClick={cancelFaq}>Cancel</Button>
+						</>
+					) : (
+						<div style={{ marginTop: '20px' }}>
+							<Button isPrimary onClick={addNewFaq}>
+								Add New
+							</Button>
+						</div>
+					)}
 				</div>
 			</div>
 		</div>
